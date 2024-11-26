@@ -4,6 +4,7 @@ use crate::{
     components::{Background, GameOverText, Ground, PressSpaceBar, ScoreText},
     constants::{WINDOW_HEIGHT, WINDOW_WIDTH},
 };
+use crate::components::{Bird, Pipe};
 
 pub fn setup(
     mut commands: Commands,
@@ -34,10 +35,11 @@ pub fn setup(
     ));
 
     // Spawn the Ground
+    // Top position.x is -200
     commands.spawn((
         SpriteBundle {
             texture: asset_server.load("texture/base.png"),
-            transform: Transform::from_xyz(0.0, -250.0, 1.0),
+            transform: Transform::from_xyz(0.0, -256.0, 1.0),
             sprite: Sprite {
                 custom_size: Some(Vec2::new(WINDOW_WIDTH, 112.0)),
                 ..Default::default()
@@ -96,5 +98,54 @@ pub fn setup(
         ));
     }
 
-    // TODO: Spawn a bird that use human avatars
+    // Spawn a bird that use human avatars
+    let bird_layout = TextureAtlasLayout::from_grid(UVec2::new(42, 40), 3, 1, None, None);
+    let bird_handle = texture_atlas_layouts.add(bird_layout);
+    commands.spawn((
+        SpriteBundle {
+            texture: asset_server.load("texture/bird-xmy.png"),
+            transform: Transform {
+                translation: Vec3::new(0.0, 0.0, 1.0),
+                scale: Vec3::splat(1.5),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        TextureAtlas {
+            index: 0,
+            layout: bird_handle,
+        },
+        Bird,
+    ));
+
+    // Spawn the LowerPipe
+    commands.spawn((
+        SpriteBundle {
+            texture: asset_server.load("texture/pipe.png"),
+            //                                                      160
+            // When the y-axis of the UpperPipe is at -40.0,
+            // it's the max length of the UpperPipe.
+            // TODO: So the y-axis range is between -200 and -40 # Draft...
+            transform: Transform::from_xyz(250.0, -200.0 + (320.0 / 2.0), 0.5),
+            ..Default::default()
+        },
+        Pipe::LowerPipe,
+    ));
+
+    // Spawn the UpperPipe
+    // Need to rotate the pipe by 180 degree
+    // and have a gap between itself and the lower pipe -> 60px <-
+    commands.spawn((
+        SpriteBundle {
+            texture: asset_server.load("texture/pipe.png"),
+            transform: Transform {
+                translation: Vec3::new(350.0, 250.0, 0.5),
+                // translation: Vec3::new(0.0, 0.0, 0.5),
+                rotation: Quat::from_rotation_z(std::f32::consts::PI),
+                ..Default::default()
+            },
+            ..Default::default()
+        },
+        Pipe::UpperPipe,
+    ));
 }

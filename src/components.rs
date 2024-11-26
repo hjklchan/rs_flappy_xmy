@@ -14,3 +14,18 @@ pub struct PressSpaceBar;
 
 #[derive(Component)]
 pub struct ScoreText;
+
+#[derive(Component)]
+pub struct Bird;
+
+#[derive(Component)]
+pub struct UpperPipe;
+
+#[derive(Component)]
+pub struct LowerPipe;
+
+#[derive(Component)]
+pub enum Pipe {
+    UpperPipe,
+    LowerPipe,
+}
