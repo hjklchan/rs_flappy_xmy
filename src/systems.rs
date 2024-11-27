@@ -166,3 +166,24 @@ pub fn bird_gravity(
         }
     }
 }
+
+pub fn jump(
+    mut query: Query<&mut Bird>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    button_input: Res<ButtonInput<KeyCode>>,
+) {
+    if !button_input.just_pressed(KeyCode::Space) {
+        return;
+    }
+
+    // Play the sound each press space
+    commands.spawn(AudioBundle {
+        source: asset_server.load("audio/wing.ogg"),
+        settings: PlaybackSettings::DESPAWN,
+    });
+
+    for mut bird in query.iter_mut() {
+        bird.velocity = 400.0;
+    }
+}
