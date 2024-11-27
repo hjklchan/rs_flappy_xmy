@@ -159,7 +159,7 @@ pub fn bird_gravity(
             // Play game over sound
             commands.spawn(AudioBundle {
                 source: asset_server.load("audio/hit.ogg"),
-                ..Default::default()
+                settings: PlaybackSettings::DESPAWN,
             });
         }
     }
