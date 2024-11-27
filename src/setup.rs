@@ -116,7 +116,10 @@ pub fn setup(
             index: 0,
             layout: bird_handle,
         },
-        Bird,
+        Bird {
+            // Change different texture every two 0.2 seconds
+            animation_timer: Timer::from_seconds(0.2, TimerMode::Repeating),
+        },
     ));
 
     // const DEL: f32 = 15.0;
