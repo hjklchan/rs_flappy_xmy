@@ -108,3 +108,18 @@ pub fn start_game(
     let mut game_over_text_visibility = game_over_text.single_mut();
     *game_over_text_visibility = Visibility::Hidden;
 }
+
+// bird_gravity
+//
+// Run if the game start
+pub fn bird_gravity(time: Res<Time>, mut query: Query<(&mut Bird, &mut Transform)>) {
+    if let Ok((mut bird, mut transform)) = query.get_single_mut() {
+        let delta = time.delta_seconds();
+        // Declare and initialize the gravity variable
+        let gravity = 9.8;
+        let delta_velocity = gravity * 150.0 * delta;
+
+        bird.velocity -= delta_velocity;
+        transform.translation.y -= bird.velocity * delta;
+    }
+}
