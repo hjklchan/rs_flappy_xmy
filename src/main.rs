@@ -8,7 +8,7 @@ mod setup;
 mod systems;
 
 use setup::setup;
-use systems::{blink_space_bar_text, move_background, move_ground};
+use systems::{animate_bird, blink_space_bar_text, move_background, move_ground};
 
 fn main() {
     // Create a bevy app
@@ -19,5 +19,6 @@ fn main() {
         .add_systems(Update, blink_space_bar_text)
         .add_systems(Update, move_background)
         .add_systems(Update, move_ground)
+        .add_systems(Update, animate_bird)
         .run();
 }

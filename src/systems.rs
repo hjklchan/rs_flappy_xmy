@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::components::{Background, Ground, PressSpaceBarText};
+use crate::components::{Background, Bird, Ground, PressSpaceBarText};
 
 pub fn blink_space_bar_text(
     time: Res<Time>,
@@ -44,5 +44,25 @@ pub fn move_ground(time: Res<Time>, mut query: Query<&mut Transform, With<Ground
 
     if transform.translation.x < 112.0 {
         transform.translation.x = 0.0;
+    }
+}
+
+pub fn animate_bird(mut query: Query<(&mut Bird, &mut TextureAtlas)>, time: Res<Time>) {
+    for (mut bird, mut texture_atlas) in query.iter_mut() {
+        let delta = time.delta();
+        // Use delta to drive the animation_timer to run
+        bird.animation_timer.tick(delta);
+
+        if bird.animation_timer.finished() {
+            let index = if texture_atlas.index == 2 {
+                0
+            } else {
+                // Previous index + 1
+                // Similar to `index += 1`
+                texture_atlas.index + 1
+            };
+
+            texture_atlas.index = index;
+        }
     }
 }
