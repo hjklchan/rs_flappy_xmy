@@ -10,7 +10,7 @@ pub struct Ground;
 pub struct GameOverText;
 
 #[derive(Component)]
-pub struct PressSpaceBar;
+pub struct PressSpaceBarText(pub Timer);
 
 #[derive(Component)]
 pub struct ScoreText;
