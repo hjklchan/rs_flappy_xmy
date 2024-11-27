@@ -1,5 +1,7 @@
+use std::f32::consts::PI;
 use bevy::prelude::*;
 
+use crate::constants::{BIRD_SCALED_HEIGHT, GROUND_HEIGHT};
 use crate::{
     components::{Background, Bird, GameOverText, Ground, PressSpaceBarText},
     resources::{Game, GameState},
@@ -112,7 +114,15 @@ pub fn start_game(
 // bird_gravity
 //
 // Run if the game start
-pub fn bird_gravity(time: Res<Time>, mut query: Query<(&mut Bird, &mut Transform)>) {
+pub fn bird_gravity(
+    time: Res<Time>,
+    mut game: ResMut<Game>,
+    mut query: Query<(&mut Bird, &mut Transform)>,
+    mut bird_texture_atlas: Query<(&mut TextureAtlas), With<Bird>>,
+    mut game_over_text_visibility: Query<&mut Visibility, (With<GameOverText>)>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
     if let Ok((mut bird, mut transform)) = query.get_single_mut() {
         let delta = time.delta_seconds();
         // Declare and initialize the gravity variable
@@ -121,5 +131,36 @@ pub fn bird_gravity(time: Res<Time>, mut query: Query<(&mut Bird, &mut Transform
 
         bird.velocity -= delta_velocity;
         transform.translation.y += bird.velocity * delta;
+
+        // If the Bird collides with the Ground
+        let ground_y_axis = -256.0;
+        let ground_height = GROUND_HEIGHT;
+        let bird_height = BIRD_SCALED_HEIGHT;
+        let collision_y_axis = ground_y_axis + ground_height / 2.0 + bird_height / 2.0;
+
+        // To stop the Bird when it touched the Ground
+        if transform.translation.y < collision_y_axis {
+            transform.translation.y = collision_y_axis;
+            bird.velocity = 0.0;
+
+            // and add rotation
+            transform.rotation = Quat::from_axis_angle(Vec3::Z, PI);
+
+            // and switch the texture (optional)
+            let mut bird_texture_atlas = bird_texture_atlas.single_mut();
+            bird_texture_atlas.index = 0;
+            // Change visibility of GameOverText to Visible
+            let mut game_over_text_visibility = game_over_text_visibility.single_mut();
+            *game_over_text_visibility = Visibility::Visible;
+
+            // Update the GameState
+            game.state = GameState::GameOver;
+
+            // Play game over sound
+            commands.spawn(AudioBundle {
+                source: asset_server.load("audio/hit.ogg"),
+                ..Default::default()
+            });
+        }
     }
 }

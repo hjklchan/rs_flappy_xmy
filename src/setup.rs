@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::components::{Bird, Pipe};
 use crate::{
     components::{Background, GameOverText, Ground, PressSpaceBarText, ScoreText},
-    constants::{WINDOW_HEIGHT, WINDOW_WIDTH},
+    constants::{WINDOW_HEIGHT, WINDOW_WIDTH, BIRD_SCALE},
 };
 use rand::{self, Rng};
 
@@ -36,7 +36,6 @@ pub fn setup(
     ));
 
     // Spawn the Ground
-    // Top position.x is -200
     commands.spawn((
         SpriteBundle {
             texture: asset_server.load("texture/base.png"),
@@ -107,7 +106,7 @@ pub fn setup(
             texture: asset_server.load("texture/bird-xmy.png"),
             transform: Transform {
                 translation: Vec3::new(0.0, 0.0, 1.0),
-                scale: Vec3::splat(1.5),
+                scale: Vec3::splat(BIRD_SCALE),
                 ..Default::default()
             },
             ..Default::default()
