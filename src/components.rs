@@ -16,7 +16,9 @@ pub struct PressSpaceBarText(pub Timer);
 pub struct ScoreText;
 
 #[derive(Component)]
-pub struct Bird;
+pub struct Bird {
+    pub animation_timer: Timer,
+}
 
 #[derive(Component)]
 pub struct UpperPipe;
