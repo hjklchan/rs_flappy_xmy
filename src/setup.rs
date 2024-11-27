@@ -1,10 +1,11 @@
 use bevy::prelude::*;
 
+use crate::components::{Bird, Pipe};
 use crate::{
     components::{Background, GameOverText, Ground, PressSpaceBar, ScoreText},
     constants::{WINDOW_HEIGHT, WINDOW_WIDTH},
 };
-use crate::components::{Bird, Pipe};
+use rand::{self, Rng};
 
 pub fn setup(
     mut commands: Commands,
@@ -80,7 +81,7 @@ pub fn setup(
     const SCORE_SPACE_X: f32 = 2.0;
     let score_number_layout = TextureAtlasLayout::from_grid(UVec2::new(24, 36), 1, 10, None, None);
     let score_number_handle = texture_atlas_layouts.add(score_number_layout);
-    // Spawn three the score texts at once
+    // Spawn three score texts at once
     for i in 0..3 {
         let offset_x = -350.0 + ((24.0 + SCORE_SPACE_X) * i as f32);
 
@@ -118,34 +119,47 @@ pub fn setup(
         Bird,
     ));
 
-    // Spawn the LowerPipe
-    commands.spawn((
-        SpriteBundle {
-            texture: asset_server.load("texture/pipe.png"),
-            //                                                      160
-            // When the y-axis of the UpperPipe is at -40.0,
-            // it's the max length of the UpperPipe.
-            // TODO: So the y-axis range is between -200 and -40 # Draft...
-            transform: Transform::from_xyz(250.0, -200.0 + (320.0 / 2.0), 0.5),
-            ..Default::default()
-        },
-        Pipe::LowerPipe,
-    ));
-
-    // Spawn the UpperPipe
-    // Need to rotate the pipe by 180 degree
-    // and have a gap between itself and the lower pipe -> 60px <-
-    commands.spawn((
-        SpriteBundle {
-            texture: asset_server.load("texture/pipe.png"),
-            transform: Transform {
-                translation: Vec3::new(350.0, 250.0, 0.5),
-                // translation: Vec3::new(0.0, 0.0, 0.5),
-                rotation: Quat::from_rotation_z(std::f32::consts::PI),
+    // const DEL: f32 = 15.0;
+    const HALF_PIPE_H: f32 = 320.0 / 2.0;
+    // Space between pairs of pipes
+    const DELTA_X: f32 = 200.0;
+    // Spawn five pair of pipes at once
+    for i in 0..5 {
+        let gen_x = (i as f32 + 1.0) * DELTA_X;
+        // First spawn the LowerPipe
+        let mut rng = rand::thread_rng();
+        // Randomly generated y-axis position
+        let mut random_pipe_position = || {
+            let lower = rng.gen_range(-200.0 - (HALF_PIPE_H + 20.0)..-200.0 + HALF_PIPE_H);
+            (lower, lower + 425.0)
+        };
+        let (lower_y, upper_y) = random_pipe_position();
+    
+        // Spawn the LowerPipe
+        commands.spawn((
+            SpriteBundle {
+                texture: asset_server.load("texture/pipe.png"),
+                transform: Transform::from_xyz(gen_x, lower_y, 0.5),
                 ..Default::default()
             },
-            ..Default::default()
-        },
-        Pipe::UpperPipe,
-    ));
+            Pipe::LowerPipe,
+        ));
+    
+        // Spawn the UpperPipe
+        // Need to rotate the pipe by 180 degree
+        // and have a gap between itself and the lower pipe -> 60px <-
+        commands.spawn((
+            SpriteBundle {
+                texture: asset_server.load("texture/pipe.png"),
+                transform: Transform {
+                    translation: Vec3::new(gen_x, upper_y, 0.5),
+                    // translation: Vec3::new(0.0, 0.0, 0.5),
+                    rotation: Quat::from_rotation_z(std::f32::consts::PI),
+                    ..Default::default()
+                },
+                ..Default::default()
+            },
+            Pipe::UpperPipe,
+        ));
+    }
 }
