@@ -119,6 +119,8 @@ pub fn setup(
         Bird {
             // Change different texture every two 0.2 seconds
             animation_timer: Timer::from_seconds(0.2, TimerMode::Repeating),
+            // Set initialize velocity is zero
+            velocity: 0.0,
         },
     ));
 

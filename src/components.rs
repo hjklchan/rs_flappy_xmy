@@ -18,6 +18,7 @@ pub struct ScoreText;
 #[derive(Component)]
 pub struct Bird {
     pub animation_timer: Timer,
+    pub velocity: f32,
 }
 
 #[derive(Component)]
