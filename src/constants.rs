@@ -1,5 +1,3 @@
-use bevy::log::warn;
-
 pub const WINDOW_WIDTH: f32 = 800.0;
 
 // A half of height is eq 256px
