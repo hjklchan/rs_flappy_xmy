@@ -99,6 +99,8 @@ pub fn start_game(
     // Update the GameState to Active
     game.state = GameState::Active;
 
+    // TODO: Reset the bird position
+
     // Hide the PressSpaceBarText
     // and reset the timer
     let (mut press_space_text, mut visibility) = press_space_text.single_mut();
