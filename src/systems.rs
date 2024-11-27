@@ -25,7 +25,7 @@ pub fn blink_space_bar_text(
 pub fn move_background(time: Res<Time>, mut query: Query<&mut Transform, With<Background>>) {
     let mut transform = query.single_mut();
     let delta = time.delta_seconds();
-    let delta_x = 20.0 * delta;
+    let delta_x = 10.0 * delta;
 
     transform.translation.x -= delta_x;
 
@@ -35,6 +35,14 @@ pub fn move_background(time: Res<Time>, mut query: Query<&mut Transform, With<Ba
     }
 }
 
-// pub fn move_ground(time: Res<Time>, mut query: Query<&mut Transform, With<Ground>>) {
+pub fn move_ground(time: Res<Time>, mut query: Query<&mut Transform, With<Ground>>) {
+    let mut transform = query.single_mut();
+    let delta = time.delta_seconds();
+    let delta_x = 20.0 * delta;
 
-// }
+    transform.translation.x -= delta_x;
+
+    if transform.translation.x < 112.0 {
+        transform.translation.x = 0.0;
+    }
+}

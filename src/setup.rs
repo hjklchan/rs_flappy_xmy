@@ -42,7 +42,7 @@ pub fn setup(
             texture: asset_server.load("texture/base.png"),
             transform: Transform::from_xyz(0.0, -256.0, 1.0),
             sprite: Sprite {
-                custom_size: Some(Vec2::new(WINDOW_WIDTH, 112.0)),
+                custom_size: Some(Vec2::new(WINDOW_WIDTH + 112.0 * 2.0, 112.0)),
                 ..Default::default()
             },
             ..Default::default()

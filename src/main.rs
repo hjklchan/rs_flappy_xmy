@@ -1,14 +1,14 @@
-use bevy::{prelude::*, window::WindowResolution};
+use bevy::prelude::*;
 use plugin::OhMyPlugin;
 
-mod plugin;
-mod constants;
-mod setup;
 mod components;
+mod constants;
+mod plugin;
+mod setup;
 mod systems;
 
 use setup::setup;
-use systems::{blink_space_bar_text, move_background};
+use systems::{blink_space_bar_text, move_background, move_ground};
 
 fn main() {
     // Create a bevy app
@@ -18,5 +18,6 @@ fn main() {
         .add_systems(Startup, setup)
         .add_systems(Update, blink_space_bar_text)
         .add_systems(Update, move_background)
+        .add_systems(Update, move_ground)
         .run();
 }
