@@ -1,6 +1,9 @@
 use bevy::prelude::*;
 
-use crate::{components::{Background, Bird, Ground, PressSpaceBarText}, resources::{Game, GameState}};
+use crate::{
+    components::{Background, Bird, GameOverText, Ground, PressSpaceBarText},
+    resources::{Game, GameState},
+};
 
 pub fn blink_space_bar_text(
     time: Res<Time>,
@@ -79,4 +82,29 @@ pub fn is_game_active(game: Res<Game>) -> bool {
 // Similar to is_game_active system
 pub fn is_game_not_active(game: Res<Game>) -> bool {
     game.state != GameState::Active
+}
+
+pub fn start_game(
+    mut game: ResMut<Game>,
+    mut press_space_text: Query<(&mut PressSpaceBarText, &mut Visibility)>,
+    mut game_over_text: Query<&mut Visibility, (With<GameOverText>, Without<PressSpaceBarText>)>,
+    button_input: Res<ButtonInput<KeyCode>>,
+) {
+    if !button_input.just_pressed(KeyCode::Space) {
+        return;
+    }
+
+    // Update the GameState to Active
+    game.state = GameState::Active;
+
+    // Hide the PressSpaceBarText
+    // and reset the timer
+    let (mut press_space_text, mut visibility) = press_space_text.single_mut();
+    press_space_text.0.reset();
+    *visibility = Visibility::Hidden;
+
+    // If game restart after game over,
+    // should reset the GameOverText to hidden
+    let mut game_over_text_visibility = game_over_text.single_mut();
+    *game_over_text_visibility = Visibility::Hidden;
 }
