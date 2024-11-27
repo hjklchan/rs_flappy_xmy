@@ -28,6 +28,11 @@ pub fn move_background(time: Res<Time>, mut query: Query<&mut Transform, With<Ba
     let delta_x = 20.0 * delta;
 
     transform.translation.x -= delta_x;
+
+    // Reset the x-axis value
+    if transform.translation.x < -288.0 {
+        transform.translation.x = 0.0;
+    }
 }
 
 // pub fn move_ground(time: Res<Time>, mut query: Query<&mut Transform, With<Ground>>) {

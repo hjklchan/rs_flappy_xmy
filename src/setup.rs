@@ -22,7 +22,7 @@ pub fn setup(
         SpriteBundle {
             texture: asset_server.load("texture/background.png"),
             sprite: Sprite {
-                custom_size: Some(Vec2::new(WINDOW_WIDTH, WINDOW_HEIGHT)),
+                custom_size: Some(Vec2::new(WINDOW_WIDTH + 288.0 * 2.0, WINDOW_HEIGHT)),
                 ..Default::default()
             },
             ..Default::default()
