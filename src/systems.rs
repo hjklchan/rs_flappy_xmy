@@ -120,6 +120,6 @@ pub fn bird_gravity(time: Res<Time>, mut query: Query<(&mut Bird, &mut Transform
         let delta_velocity = gravity * 150.0 * delta;
 
         bird.velocity -= delta_velocity;
-        transform.translation.y -= bird.velocity * delta;
+        transform.translation.y += bird.velocity * delta;
     }
 }
