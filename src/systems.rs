@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::components::{Background, Bird, Ground, PressSpaceBarText};
+use crate::{components::{Background, Bird, Ground, PressSpaceBarText}, resources::{Game, GameState}};
 
 pub fn blink_space_bar_text(
     time: Res<Time>,
@@ -65,4 +65,18 @@ pub fn animate_bird(mut query: Query<(&mut Bird, &mut TextureAtlas)>, time: Res<
             texture_atlas.index = index;
         }
     }
+}
+
+// is_game_active
+// Create a condition system to check the game state
+pub fn is_game_active(game: Res<Game>) -> bool {
+    game.state == GameState::Active
+}
+
+// is_game_not_active
+// Create a condition system to check the game state
+//
+// Similar to is_game_active system
+pub fn is_game_not_active(game: Res<Game>) -> bool {
+    game.state != GameState::Active
 }
