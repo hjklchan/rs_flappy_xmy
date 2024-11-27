@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 use crate::components::{Bird, Pipe};
 use crate::{
-    components::{Background, GameOverText, Ground, PressSpaceBar, ScoreText},
+    components::{Background, GameOverText, Ground, PressSpaceBarText, ScoreText},
     constants::{WINDOW_HEIGHT, WINDOW_WIDTH},
 };
 use rand::{self, Rng};
@@ -74,7 +74,7 @@ pub fn setup(
             transform: Transform::from_xyz(0.0, -50.0, 1.0),
             ..Default::default()
         },
-        PressSpaceBar,
+        PressSpaceBarText(Timer::from_seconds(0.5, TimerMode::Repeating)),
     ));
 
     // Spawn "Score" text
@@ -134,7 +134,7 @@ pub fn setup(
             (lower, lower + 425.0)
         };
         let (lower_y, upper_y) = random_pipe_position();
-    
+
         // Spawn the LowerPipe
         commands.spawn((
             SpriteBundle {
@@ -144,7 +144,7 @@ pub fn setup(
             },
             Pipe::LowerPipe,
         ));
-    
+
         // Spawn the UpperPipe
         // Need to rotate the pipe by 180 degree
         // and have a gap between itself and the lower pipe -> 60px <-
