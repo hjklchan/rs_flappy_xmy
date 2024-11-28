@@ -12,7 +12,7 @@ use resources::Game;
 use setup::setup;
 use systems::{
     animate_bird, bird_gravity, blink_space_bar_text, is_game_active, is_game_not_active,
-    move_background, move_ground, start_game, jump,
+    move_background, move_ground, start_game, jump, move_pipe,
 };
 
 fn main() {
@@ -29,5 +29,6 @@ fn main() {
         .add_systems(Update, start_game.run_if(is_game_not_active))
         .add_systems(Update, bird_gravity.run_if(is_game_active))
         .add_systems(Update, jump.run_if(is_game_active))
+        .add_systems(Update, move_pipe.run_if(is_game_active))
         .run();
 }

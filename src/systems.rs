@@ -1,7 +1,8 @@
-use std::f32::consts::PI;
 use bevy::prelude::*;
+use std::f32::consts::PI;
 
-use crate::constants::{BIRD_SCALED_HEIGHT, GROUND_HEIGHT};
+use crate::components::Pipe;
+use crate::constants::{BIRD_SCALED_HEIGHT, BIRD_SCALED_WIDTH, GROUND_HEIGHT, PIPE_WIDTH};
 use crate::{
     components::{Background, Bird, GameOverText, Ground, PressSpaceBarText},
     resources::{Game, GameState},
@@ -190,5 +191,50 @@ pub fn jump(
 
     for mut bird in query.iter_mut() {
         bird.velocity = 400.0;
+    }
+}
+
+pub fn move_pipe(
+    mut bird_query: Query<(&Transform, &mut Bird), Without<Pipe>>,
+    mut pipe_query: Query<&mut Transform, With<Pipe>>,
+    mut game_over_text: Query<&mut Visibility, With<GameOverText>>,
+    mut game: ResMut<Game>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    time: Res<Time>,
+) {
+    for mut transform in pipe_query.iter_mut() {
+        let delta = time.delta_seconds();
+        let delta_x = delta * 150.0;
+
+        transform.translation.x -= delta_x;
+
+        let (bird_transform, mut bird) = bird_query.single();
+        // Collision checking
+        let is_collision = || {
+            let bird_x = bird_transform.translation.x;
+            let bird_y = bird_transform.translation.y;
+            // Calculate the x-axis and y-axis of the collision
+            let bird_collision_x = bird_x + BIRD_SCALED_WIDTH / 2.0;
+            let bird_collision_y = bird_y + BIRD_SCALED_HEIGHT / 2.0;
+    
+            let pipe_x = transform.translation.x;
+            let pipe_y = transform.translation.y;
+            let pipe_collision_x = pipe_x - PIPE_WIDTH / 2.0;
+            let pipe_collision_y = pipe_y;
+    
+    
+            bird_collision_x > pipe_collision_x && bird_collision_y > pipe_collision_y
+        };
+
+        if is_collision() {
+            game.state = GameState::GameOver;
+            let mut game_over_text_visibility = game_over_text.single_mut();
+            *game_over_text_visibility = Visibility::Visible;
+            commands.spawn(AudioBundle {
+                source: asset_server.load("audio/hit.ogg"),
+                settings: PlaybackSettings::DESPAWN,
+            });
+        }
     }
 }
