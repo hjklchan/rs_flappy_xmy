@@ -3,6 +3,10 @@ use bevy::prelude::*;
 // We need to create a resource to store some information
 // - Game state (active, inactive, game over, etc.)
 // - The score of player (Bird)
+//
+#[deprecated]
+// This Game resource will be deprecated
+// Please use GameScore or GameState instead
 #[derive(Resource, Default)]
 pub struct Game {
     pub score: u32,
@@ -18,9 +22,12 @@ pub enum GameState {
 }
 
 #[derive(Resource, Default)]
+pub struct GameScore(u32);
+
+#[derive(Resource, Default)]
 pub struct GameAssets {
-    pub background_texture: Handle<Image>,
-    pub ground_texture: Handle<Image>,
+    // pub background_texture: Handle<Image>,
+    // pub ground_texture: Handle<Image>,
     pub game_over_texture: Handle<Image>,
     pub space_texture: Handle<Image>,
     pub numbers_texture: Handle<Image>,
