@@ -32,3 +32,27 @@ pub enum Pipe {
     UpperPipe,
     LowerPipe,
 }
+
+/// Movement
+///
+/// Can be bound to components or entities with mobile characteristics
+#[derive(Component)]
+pub struct Movement;
+
+#[derive(Component)]
+pub struct Velocity {
+    value: Vec3,
+}
+
+impl From<Vec3> for Velocity {
+    fn from(value: Vec3) -> Self {
+        Self {
+            value,
+        }
+    }
+}
+
+#[derive(Component)]
+pub struct Gravity {
+    value: f32,
+}
