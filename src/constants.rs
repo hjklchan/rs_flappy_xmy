@@ -1,7 +1,7 @@
 pub const WINDOW_WIDTH: f32 = 800.0;
-
-// A half of height is eq 256px
 pub const WINDOW_HEIGHT: f32 = 512.0;
+pub const WINDOW_HALF_WIDTH: f32 = WINDOW_WIDTH / 2.0;
+pub const WINDOW_HALF_HEIGHT: f32 = WINDOW_HEIGHT / 2.0;
 
 pub const GROUND_HEIGHT: f32 = 112.0;
 
