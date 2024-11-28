@@ -88,6 +88,7 @@ pub fn is_game_not_active(game: Res<Game>) -> bool {
 
 pub fn start_game(
     mut game: ResMut<Game>,
+    mut bird: Query<(&mut Bird, &mut Transform)>,
     mut press_space_text: Query<(&mut PressSpaceBarText, &mut Visibility)>,
     mut game_over_text: Query<&mut Visibility, (With<GameOverText>, Without<PressSpaceBarText>)>,
     button_input: Res<ButtonInput<KeyCode>>,
@@ -99,7 +100,11 @@ pub fn start_game(
     // Update the GameState to Active
     game.state = GameState::Active;
 
-    // TODO: Reset the bird position
+    // Reset the bird position
+    let (mut bird, mut transform) = bird.single_mut();
+    bird.velocity = 0.0;
+    transform.translation.y = 0.0;
+    transform.rotation = Quat::from_rotation_z(0.0);
 
     // Hide the PressSpaceBarText
     // and reset the timer
