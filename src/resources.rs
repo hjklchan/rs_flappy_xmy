@@ -16,3 +16,16 @@ pub enum GameState {
     Inactive,
     GameOver,
 }
+
+#[derive(Resource, Default)]
+pub struct GameAssets {
+    pub background_texture: Handle<Image>,
+    pub ground_texture: Handle<Image>,
+    pub game_over_texture: Handle<Image>,
+    pub space_texture: Handle<Image>,
+    pub numbers_texture: Handle<Image>,
+    pub bird_xmy_texture: Handle<Image>,
+    pub pipe_texture: Handle<Image>,
+    pub hit_audio: Handle<AudioSource>,
+    pub wing_audio: Handle<AudioSource>,
+}
